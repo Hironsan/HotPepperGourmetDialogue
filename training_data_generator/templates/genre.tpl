@@ -1,0 +1,4 @@
+GENRE
+GENREを探して
+GENREを食べたい
+GENREが食べたい
