@@ -40,6 +40,12 @@ class HotPepperGourmetAPI(object):
     def search_budget(self, **kwargs):
         response = self.__search('budget', **kwargs)
 
+    def search_food(self, **kwargs):
+        # keyword 完全一致を優先させる
+        response = self.__search('food', **kwargs)
+        for el in response['results']['food']:
+            print(el['name'])
+
     # エリア名、料理名、予算額を与えると、それぞれ対応するコードに変換するメソッドが必要？
     # エリア名に関してはsmall_areaAPIに名前を与えるとコードを返してくれる
     # 料理名も同様
@@ -48,4 +54,5 @@ class HotPepperGourmetAPI(object):
 
 if __name__ == '__main__':
     api = HotPepperGourmetAPI()
-    api.search_restaurant()
+    api.search_food()
+    #api.search_restaurant()
