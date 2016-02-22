@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-
+import os
 import yaml
 
-FILEIN_DICT = "sample_dict.yaml"
-FILEIN_DICT = "ontology/genre.yaml"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(BASE_DIR, 'ontology/genre.yaml')
 
-f = open(FILEIN_DICT, 'r')
-data = yaml.load(f)  # 読み込む
-f.close()
-print(data)
+with open(file_path, 'r') as f:
+    data = yaml.load(f)
