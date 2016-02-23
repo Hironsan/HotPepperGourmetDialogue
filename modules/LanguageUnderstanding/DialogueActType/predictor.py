@@ -1,29 +1,25 @@
 # -*- coding: utf-8 -*-
-from sklearn.multiclass import OneVsRestClassifier
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib
+from sklearn.ensemble import RandomForestClassifier
 
 
 class DialogueActTypePredictor(object):
 
-    def __init__(self, C=1, kernel='rbf', gamma=0.01, file_name='model.pkl'):
+    def __init__(self, file_name='model.pkl'):
         try:
-            self.__classifier = joblib.load(file_name)
+            self.estimator = joblib.load(file_name)
         except FileNotFoundError:
-            estimator = SVC(C=C, kernel=kernel, gamma=gamma)
-            self.__classifier = OneVsRestClassifier(estimator)
+            self.estimator = RandomForestClassifier()
 
     def train(self, train_x, train_y, file_name='model.pkl'):
-        self.__classifier.fit(train_x, train_y)
-        joblib.dump(self.__classifier, file_name)
+        self.estimator.fit(train_x, train_y)
+        joblib.dump(self.estimator, file_name)
 
-    def predict(self, sent):
-        pass
+    def predict(self, X):
+        self.estimator.predict(X)
 
     def evaluate(self, test_x, test_y):
-        pred_y = self.__classifier.predict(test_x)
-        print('One-against-rest: {:.5f}'.format(accuracy_score(test_y, pred_y)))
+        print(self.estimator.score(test_x, test_y))
 
 
 if __name__ == '__main__':
@@ -59,7 +55,13 @@ if __name__ == '__main__':
     test_sents = sents[train_num:]
 
     words = get_words(sents)
-    dictionary = create_dictionary(words)
+
+    dic_name = 'dic.txt'
+    try:
+        dictionary = corpora.Dictionary.load_from_text(dic_name)
+    except FileNotFoundError:
+        dictionary = create_dictionary(words)
+        dictionary.save_as_text(dic_name)
 
     train_x = [to_features(dictionary, words) for words in get_words(train_sents)]
     train_y = labels[:train_num]
@@ -67,13 +69,8 @@ if __name__ == '__main__':
     test_x = [to_features(dictionary, words) for words in get_words(test_sents)]
     test_y = labels[train_num:]
 
-    from sklearn.ensemble import RandomForestClassifier
-    estimator = RandomForestClassifier()
-    # 学習させる
-    estimator.fit(train_x, train_y)
-    print(estimator.score(test_x, test_y))
-    """
     predictor = DialogueActTypePredictor()
     predictor.train(train_x, train_y)
     predictor.evaluate(test_x, test_y)
-    """
+
+
