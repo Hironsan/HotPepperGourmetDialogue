@@ -12,11 +12,13 @@ class NamedEntityExtractor(object):
         self.__tagger = pycrfsuite.Tagger()
         try:
             self.__tagger.open(model_file)
-        except IOError:
-            raise Exception('IOError')
+        except FileNotFoundError:
+            print('Learn')
 
-    def train(self, save_file='model.crfsuite'):
+    def train(self, train_x, train_y, save_file='model.crfsuite'):
         trainer = pycrfsuite.Trainer(verbose=False)
+        for xseq, yseq in zip(train_x, train_y):
+            trainer.append(xseq, yseq)
         trainer.set_params({
             'c1': 1.0,   # coefficient for L1 penalty
             'c2': 1e-3,  # coefficient for L2 penalty
@@ -24,121 +26,63 @@ class NamedEntityExtractor(object):
             'feature.possible_transitions': True
         })
         trainer.train(save_file)
+        self.__tagger.open(save_file)
 
     def extract(self, sent):
         pass
 
+    def tagger(self, xseq):
+        return self.__tagger.tag(xseq)
 
-def is_hiragana(ch):
-    return 0x3040 <= ord(ch) <= 0x309F
+    def evaluate(self, y_true, y_pred):
+        lb = LabelBinarizer()
+        y_true_combined = lb.fit_transform(list(chain.from_iterable(y_true)))
+        y_pred_combined = lb.transform(list(chain.from_iterable(y_pred)))
 
+        tagset = set(lb.classes_) - {'O'}
+        tagset = sorted(tagset, key=lambda tag: tag.split('-', 1)[::-1])
+        class_indices = {cls: idx for idx, cls in enumerate(lb.classes_)}
 
-def is_katakana(ch):
-    return 0x30A0 <= ord(ch) <= 0x30FF
-
-
-def get_character_type(ch):
-    if ch.isspace():
-        return 'ZSPACE'
-    elif ch.isdigit():
-        return 'ZDIGIT'
-    elif ch.islower():
-        return 'ZLLET'
-    elif ch.isupper():
-        return 'ZULET'
-    elif is_hiragana(ch):
-        return 'HIRAG'
-    elif is_katakana(ch):
-        return 'KATAK'
-    else:
-        return 'OTHER'
+        return classification_report(
+            y_true_combined,
+            y_pred_combined,
+            labels=[class_indices[cls] for cls in tagset],
+            target_names=tagset,
+        )
 
 
-def get_character_types(string):
-    character_types = map(get_character_type, string)
-    character_types_str = '-'.join(sorted(set(character_types)))
+if __name__ == '__main__':
+    import os
+    import pickle
+    import random
+    from modules.LanguageUnderstanding.utils.utils import sent2features, sent2labels
+    f = lambda path: os.path.dirname(path)
 
-    return character_types_str
+    root_dir = f(f(f(f(__file__))))
+    training_data_dir = os.path.join(root_dir, 'training_data')
+    training_data = []
 
+    for file_name in os.listdir(training_data_dir):
+        if not file_name.endswith('.pkl'):
+            continue
+        file_path = os.path.join(training_data_dir, file_name)
+        with open(file_path, 'rb') as rf:
+            tmp_data = pickle.load(rf)
+            training_data.extend(tmp_data)
 
-def extract_pos_with_subtype(morph):
-    idx = morph.index('*')
+    random.shuffle(training_data)
+    train_num = int(len(training_data) * 0.9)
+    train_sents = training_data[:train_num]
+    test_sents = training_data[train_num:]
 
-    return '-'.join(morph[1:idx])
+    train_x = [sent2features(s) for s in train_sents]
+    train_y = [sent2labels(s) for s in train_sents]
 
+    test_x = [sent2features(s) for s in test_sents]
+    test_y = [sent2labels(s) for s in test_sents]
 
-def word2features(sent, i):
-    word = sent[i][0]
-    chtype = get_character_types(sent[i][0])
-    postag = extract_pos_with_subtype(sent[i])
-    features = [
-        'bias',
-        'word=' + word,
-        'type=' + chtype,
-        'postag=' + postag,
-    ]
-    if i >= 2:
-        word2 = sent[i-2][0]
-        chtype2 = get_character_types(sent[i-2][0])
-        postag2 = extract_pos_with_subtype(sent[i-2])
-        iobtag2 = sent[i-2][-1]
-        features.extend([
-            '-2:word=' + word2,
-            '-2:type=' + chtype2,
-            '-2:postag=' + postag2,
-            '-2:iobtag=' + iobtag2,
-        ])
-    else:
-        features.append('BOS')
+    extractor = NamedEntityExtractor()
+    extractor.train(train_x, train_y)
 
-    if i >= 1:
-        word1 = sent[i-1][0]
-        chtype1 = get_character_types(sent[i-1][0])
-        postag1 = extract_pos_with_subtype(sent[i-1])
-        iobtag1 = sent[i-1][-1]
-        features.extend([
-            '-1:word=' + word1,
-            '-1:type=' + chtype1,
-            '-1:postag=' + postag1,
-            '-1:iobtag=' + iobtag1,
-        ])
-    else:
-        features.append('BOS')
-
-    if i < len(sent)-1:
-        word1 = sent[i+1][0]
-        chtype1 = get_character_types(sent[i+1][0])
-        postag1 = extract_pos_with_subtype(sent[i+1])
-        features.extend([
-            '+1:word=' + word1,
-            '+1:type=' + chtype1,
-            '+1:postag=' + postag1,
-        ])
-    else:
-        features.append('EOS')
-
-    if i < len(sent)-2:
-        word2 = sent[i+2][0]
-        chtype2 = get_character_types(sent[i+2][0])
-        postag2 = extract_pos_with_subtype(sent[i+2])
-        features.extend([
-            '+2:word=' + word2,
-            '+2:type=' + chtype2,
-            '+2:postag=' + postag2,
-        ])
-    else:
-        features.append('EOS')
-
-    return features
-
-
-def sent2features(sent):
-    return [word2features(sent, i) for i in range(len(sent))]
-
-
-def sent2labels(sent):
-    return [morph[-1] for morph in sent]
-
-
-def sent2tokens(sent):
-    return [morph[0] for morph in sent]
+    pred_y = [extractor.tagger(xseq) for xseq in test_x]
+    print(extractor.evaluate(test_y, pred_y))
