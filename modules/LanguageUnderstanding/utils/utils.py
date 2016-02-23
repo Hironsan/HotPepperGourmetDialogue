@@ -111,3 +111,41 @@ def sent2labels(sent):
 
 def sent2tokens(sent):
     return [morph[0] for morph in sent]
+
+
+def word2features_(word):
+    pass
+
+
+def sent2features_(sent):
+    return [word2features_(word) for word in sent]
+
+
+def get_words(sents):
+    res = []
+    for sent in sents:
+        words = []
+        for word in sent:
+            if word[1] == '名詞':
+                surface = word[0]
+                words.append(surface)
+        res.append(words)
+
+    return res
+
+from gensim import corpora, matutils
+def create_dictionary(words):
+    dic = corpora.Dictionary(words)
+
+    return dic
+
+def create_bow(dictionary, words):
+    vec = dictionary.doc2bow(words)
+
+    return vec
+
+def to_features(dictionary, words):
+    tmp = dictionary.doc2bow(words)
+    dense = list(matutils.corpus2dense([tmp], num_terms=len(dictionary)).T[0])
+
+    return dense

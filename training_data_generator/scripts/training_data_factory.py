@@ -15,6 +15,7 @@ SAVE_DIR = os.path.join(os.path.dirname(BASE_DIR), 'training_data')
 
 file_list = ['genre.txt', 'location.txt', 'maximum_amount.txt']
 template_strs = ['GENRE', 'LOCATION', 'MAXIMUM_AMOUNT']
+
 for file_name, template_str in zip(file_list, template_strs):
     template_path = os.path.join(TEMPLATE_DIR, file_name)
     words_path = os.path.join(WORDS_DIR, file_name)
