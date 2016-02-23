@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
+from gensim import corpora, matutils
+from modules.LanguageUnderstanding.utils.utils import *
 
 
 class DialogueActTypePredictor(object):
@@ -16,17 +18,25 @@ class DialogueActTypePredictor(object):
         joblib.dump(self.estimator, file_name)
 
     def predict(self, X):
-        self.estimator.predict(X)
+        return self.estimator.predict(X)
 
     def evaluate(self, test_x, test_y):
         print(self.estimator.score(test_x, test_y))
 
 
+def sent2features_(sent):
+    from training_data_generator.scripts.analyzer import analyze_morph
+    surfaces, _ = analyze_morph(sent)
+    dictionary = corpora.Dictionary.load_from_text('dic.txt')
+    features = to_features(dictionary, surfaces)
+
+    return features
+
 if __name__ == '__main__':
     import os
     import pickle
     import random
-    from modules.LanguageUnderstanding.utils.utils import *
+
     f = lambda path: os.path.dirname(path)
 
     root_dir = f(f(f(f(__file__))))
