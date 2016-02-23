@@ -1,10 +1,11 @@
 import MeCab
 
 
-def get_wakati(sent):
+def analyze_morph(sent):
     surfaces = []
     features = []
     t = MeCab.Tagger()
+    t.parse('')
     m = t.parseToNode(sent)
     while m:
         if m.feature.startswith('BOS/EOS'):
@@ -18,4 +19,3 @@ def get_wakati(sent):
 
 if __name__ == '__main__':
     sent = "太郎はこの本を二郎を見た女性に渡した。"
-    print(get_wakati(sent))

@@ -1,6 +1,7 @@
-PyYAML==3.11
+mecab-python3==0.7
 numpy==1.10.4
 python-crfsuite==0.8.4
+PyYAML==3.11
 requests==2.9.1
 scikit-learn==0.17.1
 scipy==0.17.0
