@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from itertools import chain
 import pycrfsuite
 import sklearn
@@ -11,7 +12,8 @@ class NamedEntityExtractor(object):
     def __init__(self, model_file='model.crfsuite'):
         self.__tagger = pycrfsuite.Tagger()
         try:
-            self.__tagger.open(model_file)
+            file_path = os.path.join(os.path.dirname(__file__), model_file)
+            self.__tagger.open(file_path)
         except FileNotFoundError:
             print('Learn')
 
@@ -28,8 +30,29 @@ class NamedEntityExtractor(object):
         trainer.train(save_file)
         self.__tagger.open(save_file)
 
-    def extract(self, sent):
-        pass
+    def extract(self, xseq, sent):
+        """
+        千葉でラーメンを食べる
+        -> [['千葉', 'LOC'], ['ラーメン', 'GENRE']]
+        """
+        pred_y = self.__tagger.tag(xseq)
+        res = []
+        i = 0
+        while i < len(pred_y):
+            if pred_y[i].startswith('B'):
+                word_stack = [sent[i][0]]
+                label_stack = [pred_y[i]]
+                i += 1
+                while i < len(pred_y) and pred_y[i].startswith('I'):
+                    word_stack = [sent[i][0]]
+                    label_stack = [pred_y[i]]
+                    i += 1
+                label_stack = set([l.split('-')[1] for l in label_stack])
+                res.append([''.join(word_stack), ''.join(label_stack)])
+            else:
+                i += 1
+
+        return res
 
     def tagger(self, xseq):
         return self.__tagger.tag(xseq)

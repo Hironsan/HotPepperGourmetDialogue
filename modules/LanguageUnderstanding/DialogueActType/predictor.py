@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
 from gensim import corpora, matutils
@@ -9,7 +10,8 @@ class DialogueActTypePredictor(object):
 
     def __init__(self, file_name='model.pkl'):
         try:
-            self.estimator = joblib.load(file_name)
+            file_path = os.path.join(os.path.dirname(__file__), file_name)
+            self.estimator = joblib.load(file_path)
         except FileNotFoundError:
             self.estimator = RandomForestClassifier()
 
@@ -18,7 +20,7 @@ class DialogueActTypePredictor(object):
         joblib.dump(self.estimator, file_name)
 
     def predict(self, X):
-        return self.estimator.predict(X)
+        return self.estimator.predict(X)[0]
 
     def evaluate(self, test_x, test_y):
         print(self.estimator.score(test_x, test_y))
@@ -26,8 +28,9 @@ class DialogueActTypePredictor(object):
 
 def sent2features_(sent):
     from training_data_generator.scripts.analyzer import analyze_morph
+    dic_path = os.path.join(os.path.dirname(__file__), 'dic.txt')
     surfaces, _ = analyze_morph(sent)
-    dictionary = corpora.Dictionary.load_from_text('dic.txt')
+    dictionary = corpora.Dictionary.load_from_text(dic_path)
     features = to_features(dictionary, surfaces)
 
     return features
