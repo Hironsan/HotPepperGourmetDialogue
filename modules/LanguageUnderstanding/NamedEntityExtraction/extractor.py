@@ -33,7 +33,7 @@ class NamedEntityExtractor(object):
     def extract(self, xseq, sent):
         """
         千葉でラーメンを食べる
-        -> [['千葉', 'LOC'], ['ラーメン', 'GENRE']]
+        -> [['LOC', '千葉'], ['GENRE', 'ラーメン']]
         """
         pred_y = self.__tagger.tag(xseq)
         res = []
@@ -48,7 +48,7 @@ class NamedEntityExtractor(object):
                     label_stack = [pred_y[i]]
                     i += 1
                 label_stack = set([l.split('-')[1] for l in label_stack])
-                res.append([''.join(word_stack), ''.join(label_stack)])
+                res.append([''.join(label_stack), ''.join(word_stack)])
             else:
                 i += 1
 

@@ -4,7 +4,16 @@
 class DialogueState(object):
 
     def __init__(self):
-        pass
+        self.__state = {'GENRE': None, 'LOCATION': None, 'MAXIMUM_AMOUNT': None}
 
-    def update(self, act_type, named_entities):
-        pass
+    def update(self, dialogue_act):
+        self.__state['GENRE'] = dialogue_act.get('GENRE', self.__state['GENRE'])
+        self.__state['LOCATION'] = dialogue_act.get('LOCATION', self.__state['LOCATION'])
+        self.__state['MAXIMUM_AMOUNT'] = dialogue_act.get('MAXIMUM_AMOUNT', self.__state['MAXIMUM_AMOUNT'])
+
+    def has(self, name):
+        return self.__state[name] != None
+
+    def __str__(self):
+        import pprint
+        return pprint.pformat(self.__state)
