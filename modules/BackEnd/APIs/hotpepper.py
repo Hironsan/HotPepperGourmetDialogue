@@ -3,6 +3,10 @@ import os
 import requests
 
 
+class AreaNotFoundException(BaseException):
+    pass
+
+
 class HotPepperGourmetAPI(object):
 
     BASE_URL = 'http://webservice.recruit.co.jp/hotpepper/{0}/v1/'
@@ -26,14 +30,18 @@ class HotPepperGourmetAPI(object):
     def area_name2area_code(self, **kwargs):
         # keyword 完全一致を優先させる
         response = self.__search('small_area', **kwargs)
-        small_area_code = response['small_area']['code']
-
-        return small_area_code
+        small_areas = response['results']['small_area']
+        try:
+            area_code = small_areas[0]['code']
+        except IndexError:
+            raise AreaNotFoundException
+        return area_code
 
     def food_name2food_code(self, **kwargs):
         # keyword 完全一致を優先させる
         response = self.__search('food', **kwargs)
-        food_code = response['food']['code']
+        foods = response['results']['food']
+        food_code = foods[0]['code']
 
         return food_code
 
