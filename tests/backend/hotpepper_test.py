@@ -41,9 +41,6 @@ class HotPepperAPITest(unittest.TestCase):
         self.assertEqual(budget_code, 'B006')
 
     def test_search_restaurant(self):
-        area_code = self.api.area_name2area_code(keyword='西新宿')
-        food_code = self.api.food_name2food_code(keyword='ラーメン')
-        budget_code = self.api.to_budget_code('1000')
-        response = self.api.search_restaurant(food=food_code, budget=budget_code, small_area=area_code)
+        response = self.api.search_restaurant(area='西新宿', food='ラーメン', budget='1000')
         import pprint
         pprint.pprint(response)

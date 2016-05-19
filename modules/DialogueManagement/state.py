@@ -14,6 +14,15 @@ class DialogueState(object):
     def has(self, name):
         return self.__state[name] != None
 
+    def get_area(self):
+        return self.__state['LOCATION']
+
+    def get_food(self):
+        return self.__state['GENRE']
+
+    def get_budget(self):
+        return self.__state['MAXIMUM_AMOUNT']
+
     def __str__(self):
         import pprint
         return pprint.pformat(self.__state)

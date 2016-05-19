@@ -15,13 +15,21 @@ class LanguageGenerator(object):
         if 'MAXIMUM_AMOUNT' in dialogue_act:
             sent += '予算は{0}円ですね。'.format(dialogue_act['MAXIMUM_AMOUNT'])
 
-        if dialogue_act['next'] == 'LOCATION':
+        sys_act_type = dialogue_act['sys_act_type']
+        if sys_act_type == 'REQUEST_LOCATION':
             sent += '場所はどのあたりですか？'
-        elif dialogue_act['next'] == 'GENRE':
+        elif sys_act_type == 'REQUEST_GENRE':
             sent += '料理のジャンルを教えてください。'
-        elif dialogue_act['next'] == 'MAXIMUM_AMOUNT':
+        elif sys_act_type == 'REQUEST_BUDGET':
             sent += '予算の上限はどのくらいですか？'
+        elif sys_act_type == 'INFORM_RESTAURANT':
+            #sent += 'ではこちらの場所はどうでしょうか？\n'
+            restaurant = dialogue_act['restaurant']
+            name, address, access = restaurant['name'], restaurant['address'], restaurant['access']
+            sent += 'では、{0}がおすすめです。場所は{1}で{2}です。'.format(name, address, access)
         else:
-            sent += 'ではこちらの場所はどうでしょうか？（HotPepper APIを叩いて場所を出す）'
+            print('Error')
+            import sys
+            sys.exit(-1)
 
         return sent

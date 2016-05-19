@@ -22,11 +22,17 @@ class HotPepperGourmetAPI(object):
 
         return response
 
-    def search_restaurant(self, **kwargs):
+    def search_restaurant(self, area, food, budget):
         # 指定するリクエストパラメータ
         # key, small_area, food, budget
-        response = self.__search('gourmet', **kwargs)
-        return response
+        area_code = self.area_name2area_code(keyword=area)
+        food_code = self.food_name2food_code(keyword=food)
+        budget_code = self.to_budget_code(budget)
+        response = self.__search('gourmet', food=food_code, budget=budget_code, small_area=area_code)
+        if int(response['results']['results_returned']) >= 1:
+            return response['results']['shop'][0]
+        else:
+            return []
 
     def area_name2area_code(self, **kwargs):
         # keyword 完全一致を優先させる
@@ -70,13 +76,7 @@ class HotPepperGourmetAPI(object):
         for el in response['results']['food']:
             print(el['name'])
 
-    # エリア名、料理名、予算額を与えると、それぞれ対応するコードに変換するメソッドが必要？
-    # エリア名に関してはsmall_areaAPIに名前を与えるとコードを返してくれる
-    # 料理名も同様
-    # 予算に関してはなさそうなので、対応させるロジックを組む必要がある
-
 
 if __name__ == '__main__':
     api = HotPepperGourmetAPI()
     api.search_food()
-    #api.search_restaurant()

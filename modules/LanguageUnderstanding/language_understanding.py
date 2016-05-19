@@ -20,7 +20,7 @@ class LanguageUnderstanding(object):
         features = sent2features(morphed_sent)
         named_entity = self.__extractor.extract(features, morphed_sent)
 
-        dialogue_act = {'act_type': act_type}
+        dialogue_act = {'user_act_type': act_type}
         dialogue_act.update(dict(named_entity))
 
         return dialogue_act
