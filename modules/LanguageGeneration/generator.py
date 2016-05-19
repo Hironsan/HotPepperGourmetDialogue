@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 
 
 class LanguageGenerator(object):
@@ -23,13 +24,14 @@ class LanguageGenerator(object):
         elif sys_act_type == 'REQUEST_BUDGET':
             sent += '予算の上限はどのくらいですか？'
         elif sys_act_type == 'INFORM_RESTAURANT':
-            #sent += 'ではこちらの場所はどうでしょうか？\n'
             restaurant = dialogue_act['restaurant']
-            name, address, access = restaurant['name'], restaurant['address'], restaurant['access']
-            sent += 'では、{0}がおすすめです。場所は{1}で{2}です。'.format(name, address, access)
+            if restaurant:
+                name, address, access = restaurant['name'], restaurant['address'], restaurant['access']
+                sent += 'では、{0}がおすすめです。\n場所は{1}で{2}です。'.format(name, address, access)
+            else:
+                sent += '申し訳ありません。条件に一致するお店が見つかりませんでした。'
         else:
             print('Error')
-            import sys
             sys.exit(-1)
 
         return sent
