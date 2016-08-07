@@ -12,7 +12,7 @@ class DialogueState(object):
         self.__state['MAXIMUM_AMOUNT'] = dialogue_act.get('MAXIMUM_AMOUNT', self.__state['MAXIMUM_AMOUNT'])
 
     def has(self, name):
-        return self.__state[name] != None
+        return self.__state.get(name, None) != None
 
     def get_area(self):
         return self.__state['LOCATION']
