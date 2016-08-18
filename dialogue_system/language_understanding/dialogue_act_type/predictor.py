@@ -2,7 +2,7 @@
 from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
 
-from bot.language_understanding.utils.utils import *
+from dialogue_system.language_understanding.utils.utils import *
 
 
 class DialogueActTypePredictor(object):

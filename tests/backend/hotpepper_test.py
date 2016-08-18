@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from bot.backend.apis.hotpepper import HotPepperGourmetAPI, AreaNotFoundException
+from dialogue_system.backend.apis.hotpepper import HotPepperGourmetAPI, AreaNotFoundException
 
 
 class HotPepperAPITest(unittest.TestCase):

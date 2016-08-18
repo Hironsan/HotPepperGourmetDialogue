@@ -77,7 +77,7 @@ if __name__ == '__main__':
     import os
     import pickle
     import random
-    from bot.language_understanding.utils.utils import sent2features, sent2labels
+    from dialogue_system.language_understanding.utils.utils import sent2features, sent2labels
     f = lambda path: os.path.dirname(path)
 
     root_dir = f(f(f(f(__file__))))

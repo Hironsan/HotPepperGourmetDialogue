@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from bot.language_understanding.dialogue_act_type.predictor import DialogueActTypePredictor, sent2features_
-from bot.language_understanding.attribute_extraction.extractor import NamedEntityExtractor
-from bot.language_understanding.utils.utils import sent2features
+from dialogue_system.language_understanding.dialogue_act_type.predictor import DialogueActTypePredictor, sent2features_
+from dialogue_system.language_understanding.attribute_extraction.extractor import NamedEntityExtractor
+from dialogue_system.language_understanding.utils.utils import sent2features
 from training_data_generator.scripts.analyzer import analyze_morph
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from bot.dialogue_management.manager import DialogueManager
-from bot.language_generation.generator import LanguageGenerator
-from bot.language_understanding.language_understanding import LanguageUnderstanding
+from dialogue_system.dialogue_management.manager import DialogueManager
+from dialogue_system.language_generation.generator import LanguageGenerator
+from dialogue_system.language_understanding.language_understanding import LanguageUnderstanding
 
 if __name__ == '__main__':
     generator = LanguageGenerator()
