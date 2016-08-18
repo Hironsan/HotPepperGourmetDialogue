@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
 
-import requests
+from doco.client import Client
 
 
 class DocomoDialogAPI(object):
-    BASE_URL = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue'
 
     def __init__(self, api_key=None):
-        self.__api_key = os.environ.get('DOCOMO_DIALOG_API_KEY', api_key)
+        api_key = os.environ.get('DOCOMO_DIALOG_API_KEY', api_key)
+        self.__client = Client(apikey=api_key)
 
     def reply(self, text):
-        params = {'APIKEY': self.__api_key, 'utt': text}
-        response = requests.post(self.BASE_URL, params).json()
+        response = self.__client.send(utt=text, apiname='Dialogue')
         utt = response['utt']
 
         return utt
