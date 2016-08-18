@@ -1,4 +1,4 @@
-# HotPepperGourmetDialogue
+﻿# HotPepperGourmetDialogue
 Restaurant Search System through Dialogue in Japanese.
 
 
@@ -8,6 +8,18 @@ On the application root directory, execute following command to install required
 ```
 pip install -r requirements.txt
 ```
+
+If you are on Windows, you should use `conda`.
+
+```
+conda create -n dialog_env --file conda_requirements.txt
+activate dialog_env
+pip install -r requirements_windows.txt
+```
+
+Additionally, you have to install `MeCab` and `python-crfsuite` (these require Visual Studio).
+
+
 
 ## Setting
 Set Hot Pepper and Docomo API key to environment variables.
