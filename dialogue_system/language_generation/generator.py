@@ -23,6 +23,8 @@ class LanguageGenerator(object):
             sent += '料理のジャンルを教えてください。'
         elif sys_act_type == 'REQUEST_BUDGET':
             sent += '予算の上限はどのくらいですか？'
+        elif sys_act_type == 'CHAT':
+            sent += dialogue_act['utt']
         elif sys_act_type == 'INFORM_RESTAURANT':
             restaurant = dialogue_act['restaurant']
             if restaurant:

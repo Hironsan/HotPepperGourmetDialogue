@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from copy import deepcopy
+
 from dialogue_system.dialogue_management.state import DialogueState
 from dialogue_system.backend.apis.hotpepper import HotPepperGourmetAPI
+from dialogue_system.backend.apis.docomo_dialogue import DocomoDialogAPI
 
 
 class DialogueManager(object):
@@ -12,9 +15,13 @@ class DialogueManager(object):
         self.dialogue_state.update(dialogue_act)
 
     def select_action(self, dialogue_act):
-        from copy import deepcopy
         sys_act = deepcopy(dialogue_act)
-        if not self.dialogue_state.has('LOCATION'):
+        if dialogue_act['user_act_type'] == 'other':
+            api = DocomoDialogAPI()
+            reply = api.reply(dialogue_act['utt'])
+            sys_act['sys_act_type'] = 'CHAT'
+            sys_act['utt'] = reply
+        elif not self.dialogue_state.has('LOCATION'):
             sys_act['sys_act_type'] = 'REQUEST_LOCATION'
         elif not self.dialogue_state.has('GENRE'):
             sys_act['sys_act_type'] = 'REQUEST_GENRE'
