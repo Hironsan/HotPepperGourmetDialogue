@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
-from modules.BackEnd.APIs.docomo_dialogue import DocomoDialogAPI
+
+from bot.backend.apis.docomo_dialogue import DocomoDialogAPI
 
 
 class DocomoDialogAPITest(unittest.TestCase):

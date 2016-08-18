@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import os
 from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
-from gensim import corpora, matutils
-from modules.LanguageUnderstanding.utils.utils import *
+
+from bot.language_understanding.utils.utils import *
 
 
 class DialogueActTypePredictor(object):

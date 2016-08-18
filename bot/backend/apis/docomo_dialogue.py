@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
+
 import requests
 
 
 class DocomoDialogAPI(object):
-
     BASE_URL = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue'
 
     def __init__(self, api_key=None):

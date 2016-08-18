@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from modules.DialogueManagement.manager import DialogueManager
-from modules.LanguageGeneration.generator import LanguageGenerator
-from modules.LanguageUnderstanding.language_understanding import LanguageUnderstanding
+from bot.dialogue_management.manager import DialogueManager
+from bot.language_generation.generator import LanguageGenerator
+from bot.language_understanding.language_understanding import LanguageUnderstanding
 
 
 class Bot(object):

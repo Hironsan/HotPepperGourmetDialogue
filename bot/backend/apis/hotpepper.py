@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+
 import requests
 
 
@@ -8,7 +9,6 @@ class AreaNotFoundException(BaseException):
 
 
 class HotPepperGourmetAPI(object):
-
     BASE_URL = 'http://webservice.recruit.co.jp/hotpepper/{0}/v1/'
 
     def __init__(self, api_key=None):

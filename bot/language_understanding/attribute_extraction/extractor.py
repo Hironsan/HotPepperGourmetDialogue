@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 from itertools import chain
+
 import pycrfsuite
-import sklearn
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import LabelBinarizer
 
@@ -78,7 +77,7 @@ if __name__ == '__main__':
     import os
     import pickle
     import random
-    from modules.LanguageUnderstanding.utils.utils import sent2features, sent2labels
+    from bot.language_understanding.utils.utils import sent2features, sent2labels
     f = lambda path: os.path.dirname(path)
 
     root_dir = f(f(f(f(__file__))))

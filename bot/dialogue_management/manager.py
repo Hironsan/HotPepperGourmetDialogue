@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from modules.DialogueManagement.state import DialogueState
-from modules.BackEnd.APIs.hotpepper import HotPepperGourmetAPI
+from bot.dialogue_management.state import DialogueState
+from bot.backend.apis.hotpepper import HotPepperGourmetAPI
 
 
 class DialogueManager(object):
