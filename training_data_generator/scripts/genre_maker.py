@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-from knowledge.reader import data
 
+from dialogue_system.knowledge.reader import data
 
 if __name__ == '__main__':
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

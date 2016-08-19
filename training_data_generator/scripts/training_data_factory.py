@@ -13,7 +13,7 @@ SAVE_DIR = os.path.join(os.path.dirname(BASE_DIR), 'training_data')
 
 
 
-file_list = ['genre.txt', 'location.txt', 'maximum_amount.txt']
+file_list = ['genre.txt', 'locations.txt', 'maximum_amount.txt']
 template_strs = ['GENRE', 'LOCATION', 'MAXIMUM_AMOUNT']
 
 for file_name, template_str in zip(file_list, template_strs):
