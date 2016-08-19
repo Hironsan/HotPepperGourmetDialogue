@@ -26,6 +26,22 @@ class DialogueActTypePredictor(object):
         print(self.estimator.score(test_x, test_y))
 
 
+class RuleBasedDialogueActTypeEstimater(object):
+
+    def __init__(self):
+        pass
+
+    def estimate(self, attribute):
+        if attribute['GENRE'] != '':
+            return 'genre'
+        elif attribute['LOCATION'] != '':
+            return 'location'
+        elif attribute['MAXIMUM_AMOUNT'] != '':
+            return 'maximum_amount'
+        else:
+            return 'other'
+
+
 def sent2features_(sent):
     from training_data_generator.scripts.analyzer import analyze_morph
     dic_path = os.path.join(os.path.dirname(__file__), 'dic.txt')
