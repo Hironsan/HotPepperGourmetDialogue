@@ -39,7 +39,7 @@ class RuleBasedLanguageUnderstanding(object):
 
         dialogue_act = {'user_act_type': act_type, 'utt': sent}
         attribute_cp = copy.copy(attribute)
-        for k, v in attribute_cp:
+        for k, v in attribute_cp.items():
             if v == '':
                 del attribute[k]
         dialogue_act.update(attribute)
