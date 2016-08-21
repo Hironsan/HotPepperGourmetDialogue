@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import re
 from itertools import chain
 
 import yaml
@@ -14,7 +13,7 @@ class MLBasedAttributeExtractor(object):
     def __init__(self, model_file='model.crfsuite'):
         self.__tagger = pycrfsuite.Tagger()
         try:
-            file_path = os.path.join(os.path.dirname(__file__), model_file)
+            file_path = os.path.join(os.path.dirname(__file__), 'model', model_file)
             self.__tagger.open(file_path)
         except FileNotFoundError:
             print('Learn')

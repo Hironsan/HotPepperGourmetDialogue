@@ -10,7 +10,7 @@ class MLBasedDialogueActTypeEstimator(object):
 
     def __init__(self, file_name='model.pkl'):
         try:
-            file_path = os.path.join(os.path.dirname(__file__), file_name)
+            file_path = os.path.join(os.path.dirname(__file__), 'model', file_name)
             self.estimator = joblib.load(file_path)
         except FileNotFoundError:
             self.estimator = RandomForestClassifier()
