@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from dialogue_system.language_understanding.utils.utils import *
 
 
-class DialogueActTypePredictor(object):
+class MLBasedDialogueActTypeEstimator(object):
 
     def __init__(self, file_name='model.pkl'):
         try:
@@ -24,22 +24,6 @@ class DialogueActTypePredictor(object):
 
     def evaluate(self, test_x, test_y):
         print(self.estimator.score(test_x, test_y))
-
-
-class RuleBasedDialogueActTypeEstimater(object):
-
-    def __init__(self):
-        pass
-
-    def estimate(self, attribute):
-        if attribute['GENRE'] != '':
-            return 'genre'
-        elif attribute['LOCATION'] != '':
-            return 'location'
-        elif attribute['MAXIMUM_AMOUNT'] != '':
-            return 'maximum_amount'
-        else:
-            return 'other'
 
 
 def sent2features_(sent):
@@ -98,7 +82,7 @@ if __name__ == '__main__':
     test_x = [to_features(dictionary, words) for words in get_words(test_sents)]
     test_y = labels[train_num:]
 
-    predictor = DialogueActTypePredictor()
+    predictor = MLBasedDialogueActTypeEstimator()
     predictor.train(train_x, train_y)
     predictor.evaluate(test_x, test_y)
 

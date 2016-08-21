@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from dialogue_system.language_understanding.attribute_extraction.extractor import AttributeExtractor
+from dialogue_system.language_understanding.attribute_extraction.ml_based_extractor import RuleBasedAttributeExtractor
 
 
 class AttributeExtractorTest(unittest.TestCase):
 
     def setUp(self):
-        self.extractor = AttributeExtractor()
+        self.extractor = RuleBasedAttributeExtractor()
 
     def tearDown(self):
         pass

@@ -1,16 +1,40 @@
 # -*- coding: utf-8 -*-
 import copy
-from dialogue_system.language_understanding.dialogue_act_type.predictor import DialogueActTypePredictor, sent2features_, RuleBasedDialogueActTypeEstimater
-from dialogue_system.language_understanding.attribute_extraction.extractor import NamedEntityExtractor, AttributeExtractor
+
+from dialogue_system.language_understanding.attribute_extraction.rule_based_extractor import RuleBasedAttributeExtractor
+from dialogue_system.language_understanding.dialogue_act_type.rule_based_estimator import RuleBasedDialogueActTypeEstimator
+
+from dialogue_system.language_understanding.attribute_extraction.ml_based_extractor import MLBasedAttributeExtractor
+from dialogue_system.language_understanding.dialogue_act_type.ml_based_estimator import MLBasedDialogueActTypeEstimator, sent2features_
 from dialogue_system.language_understanding.utils.utils import sent2features
 from training_data_generator.scripts.analyzer import analyze_morph
 
 
-class LanguageUnderstanding(object):
+class RuleBasedLanguageUnderstanding(object):
 
     def __init__(self):
-        self.__predictor = DialogueActTypePredictor()
-        self.__extractor = NamedEntityExtractor()
+        self.__estimator = RuleBasedDialogueActTypeEstimator()
+        self.__extractor = RuleBasedAttributeExtractor()
+
+    def execute(self, sent):
+        attribute = self.__extractor.extract(sent)
+        act_type = self.__estimator.estimate(attribute)
+
+        dialogue_act = {'user_act_type': act_type, 'utt': sent}
+        attribute_cp = copy.copy(attribute)
+        for k, v in attribute_cp.items():
+            if v == '':
+                del attribute[k]
+        dialogue_act.update(attribute)
+
+        return dialogue_act
+
+
+class MLBasedLanguageUnderstanding(object):
+
+    def __init__(self):
+        self.__predictor = MLBasedDialogueActTypeEstimator()
+        self.__extractor = MLBasedAttributeExtractor()
 
     def execute(self, sent):
         features = sent2features_(sent)
@@ -27,30 +51,9 @@ class LanguageUnderstanding(object):
         return dialogue_act
 
 
-class RuleBasedLanguageUnderstanding(object):
-
-    def __init__(self):
-        self.__estimator = RuleBasedDialogueActTypeEstimater()
-        self.__extractor = AttributeExtractor()
-
-    def execute(self, sent):
-        attribute = self.__extractor.extract(sent)
-        act_type = self.__estimator.estimate(attribute)
-
-        dialogue_act = {'user_act_type': act_type, 'utt': sent}
-        attribute_cp = copy.copy(attribute)
-        for k, v in attribute_cp.items():
-            if v == '':
-                del attribute[k]
-        dialogue_act.update(attribute)
-
-        return dialogue_act
-
-
-
 if __name__ == '__main__':
     sent = 'ラーメンを食べたい'
-    language_understanding = LanguageUnderstanding()
+    language_understanding = MLBasedLanguageUnderstanding()
     language_understanding.execute(sent)
     sent = '西新宿'
     language_understanding.execute(sent)

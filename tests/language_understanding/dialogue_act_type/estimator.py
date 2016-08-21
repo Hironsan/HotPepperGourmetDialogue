@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from dialogue_system.language_understanding.attribute_extraction.extractor import AttributeExtractor
-from dialogue_system.language_understanding.dialogue_act_type.predictor import RuleBasedDialogueActTypeEstimater
+from dialogue_system.language_understanding.attribute_extraction.ml_based_extractor import RuleBasedAttributeExtractor
+from dialogue_system.language_understanding.dialogue_act_type.ml_based_estimator import RuleBasedDialogueActTypeEstimator
 
 
 class AttributeExtractorTest(unittest.TestCase):
 
     def setUp(self):
-        self.extractor = AttributeExtractor()
-        self.estimator = RuleBasedDialogueActTypeEstimater()
+        self.extractor = RuleBasedAttributeExtractor()
+        self.estimator = RuleBasedDialogueActTypeEstimator()
 
     def tearDown(self):
         pass
