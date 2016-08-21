@@ -35,5 +35,6 @@ class DialogueManager(object):
             restaurant = api.search_restaurant(area=area, food=food,budget=budget)
             sys_act['sys_act_type'] = 'INFORM_RESTAURANT'
             sys_act['restaurant'] = restaurant
+            self.dialogue_state.clear()
 
         return sys_act
