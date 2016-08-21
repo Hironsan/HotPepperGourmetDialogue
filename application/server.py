@@ -3,7 +3,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 
-from application.bot import Bot
+from dialogue_system.bot import Bot
 
 
 class MessageServer(tornado.websocket.WebSocketHandler):

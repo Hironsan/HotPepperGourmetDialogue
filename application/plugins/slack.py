@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import os.path
-import pickle
 
 from slackbot.bot import respond_to
-from application.bot import Bot
+
+from dialogue_system.bot import Bot
 
 bots = {}
 
