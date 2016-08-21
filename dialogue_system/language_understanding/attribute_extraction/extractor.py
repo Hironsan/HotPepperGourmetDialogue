@@ -9,6 +9,7 @@ from sklearn.metrics import classification_report
 from sklearn.preprocessing import LabelBinarizer
 
 from dialogue_system.knowledge.reader import read_genres, read_locations
+from dialogue_system.language_understanding.utils.utils import kansuji2arabic
 
 
 class NamedEntityExtractor(object):
@@ -107,9 +108,10 @@ class AttributeExtractor(object):
     def __extract_budget(self, text):
         pattern = r'\d+円|[一二三四五六七八九十壱弐参拾百千万萬億兆〇]+円'
         matchOB = re.findall(pattern, text)
-        budget = matchOB[0][:-1] if len(matchOB) > 0 else ''
+        budget_str = matchOB[0][:-1] if len(matchOB) > 0 else ''
+        budget_int = kansuji2arabic(budget_str)
 
-        return budget
+        return budget_int
 
 if __name__ == '__main__':
     import os
