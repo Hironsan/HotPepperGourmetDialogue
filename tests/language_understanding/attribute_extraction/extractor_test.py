@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from dialogue_system.language_understanding.attribute_extraction.ml_based_extractor import RuleBasedAttributeExtractor
+from dialogue_system.language_understanding.attribute_extraction.rule_based_extractor import RuleBasedAttributeExtractor
 
 
 class AttributeExtractorTest(unittest.TestCase):
