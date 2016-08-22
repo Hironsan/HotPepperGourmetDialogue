@@ -1,5 +1,4 @@
 import re
-from gensim import corpora, matutils
 
 
 tt_ksuji = str.maketrans('一二三四五六七八九〇壱弐参', '1234567890123')
