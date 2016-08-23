@@ -16,7 +16,7 @@ class DialogueManager(object):
 
     def select_action(self, dialogue_act):
         sys_act = deepcopy(dialogue_act)
-        if dialogue_act['user_act_type'] == 'other':
+        if dialogue_act['user_act_type'] == 'OTHER':
             api = DocomoDialogAPI()
             reply = api.reply(dialogue_act['utt'])
             sys_act['sys_act_type'] = 'CHAT'
