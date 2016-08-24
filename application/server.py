@@ -6,6 +6,12 @@ import tornado.websocket
 from dialogue_system.bot import Bot
 
 
+class IndexHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write('Hello World!')
+
+
 class MessageServer(tornado.websocket.WebSocketHandler):
     bots = {}
 
@@ -27,7 +33,10 @@ class MessageServer(tornado.websocket.WebSocketHandler):
         print('on close')
         del self.bots[self]
 
-application = tornado.web.Application([(r'/ws', MessageServer)])
+application = tornado.web.Application([
+    (r'/', IndexHandler),
+    (r'/ws', MessageServer)
+    ])
 
 if __name__ == '__main__':
     application.listen(8080)
